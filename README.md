@@ -18,28 +18,22 @@ using `assertTrue`. The program exits unsuccessfully unless A fails and B passes
 
 ## Develop against the sibling zio-evals checkout
 
-The skills API is currently in `../zio-evals`:
-
 ```bash
-./sbt -Dlocal compile
-./sbt -Dlocal run
+./sbt run
 ```
-
-Without `-Dlocal`, the build uses the published
-`com.jamesward:zio-evals_3:0.0.3` release.
 
 ## Runtime options
 
 Kiro is the default backend and uses the operator's default model:
 
 ```bash
-./sbt -Dlocal run
+./sbt run
 ```
 
 Claude Code can be selected explicitly:
 
 ```bash
-./sbt -Dlocal \
+./sbt \
   -Deval.backend=claude \
   -Deval.model=claude-sonnet-4-6 \
   -Deval.maxBudgetUsd=1.00 \
