@@ -1,6 +1,8 @@
 import com.jamesward.zio_evals.*
 import com.jamesward.zio_evals.cli.{ClaudeCliAgentLoop, KiroCliAgentLoop}
+import com.jamesward.zio_typesafe_ai.TypeSafeAI
 import zio.*
+import zio.http.Client
 
 object Main extends ZIOAppDefault:
 
@@ -75,10 +77,9 @@ object Main extends ZIOAppDefault:
     f"${result.arm.label}: verdict=${result.verdict} passRate=${result.passRate}%.2f checks=${result.checksPassed} " +
       f"latencyMs=${result.metrics.latencyMs}%.0f rationale=${result.rationale}"
 
-  def run =
-    val judge = AgentLoopJudge(agentLoop, judgeModelId)
+  private def runEval(judge: Judge, judgeDescription: String): Task[Unit] =
     for
-      _       <- Console.printLine(s"Running zen-of-james eval: backend=$backendName model=${Option(modelId).filter(_.nonEmpty).getOrElse("default")} samples=$samples")
+      _       <- Console.printLine(s"Running zen-of-james eval: backend=$backendName model=${Option(modelId).filter(_.nonEmpty).getOrElse("default")} judge=$judgeDescription samples=$samples")
       _       <- preflight
       results <- EvalRunner.run(spec, arms, List(modelId), samples, agentLoop, judge)
       _       <- ZIO.foreachDiscard(results)(r => Console.printLine(summary(r)))
@@ -91,3 +92,11 @@ object Main extends ZIOAppDefault:
            )).unless(baselineFailed && treatmentPassed)
       _ <- Console.printLine("Expected contrast confirmed: baseline FAIL, zen-of-james PASS")
     yield ()
+
+  def run =
+    if sys.env.get("TYPESAFE_API_KEY").exists(_.trim.nonEmpty) then
+      JevJudge.make()
+        .flatMap(runEval(_, "jev"))
+        .provide(Client.default, TypeSafeAI.Client.live)
+    else
+      runEval(AgentLoopJudge(agentLoop, judgeModelId), s"agent-loop(${Option(judgeModelId).filter(_.nonEmpty).getOrElse("default")})")

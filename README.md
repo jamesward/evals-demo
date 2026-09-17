@@ -16,11 +16,20 @@ principles: illegal states unrepresentable, domain types, parse-don't-validate,
 closed ADTs, immutability, effects as values, resource safety, and test onions
 using `assertTrue`. The program exits unsuccessfully unless A fails and B passes.
 
-## Develop against the sibling zio-evals checkout
+## Run
+
+When `TYPESAFE_API_KEY` is non-empty, the demo judges with Jev;
+`TYPESAFE_DEFAULT_MODEL` is optional and defaults to `jev-latest`.
 
 ```bash
+export TYPESAFE_API_KEY=...
 ./sbt run
 ```
+
+Without `TYPESAFE_API_KEY`, the demo automatically falls back to
+`AgentLoopJudge` using the selected CLI backend. Its model defaults to
+`eval.model` (or the backend default) and can be overridden with
+`-Deval.judgeModel=...`.
 
 ## Runtime options
 
@@ -40,11 +49,14 @@ Claude Code can be selected explicitly:
   run
 ```
 
-Use `-Deval.samples=5` for a less noisy final comparison. One sample requires
-three model calls: baseline, treatment, and judge.
+Use `-Deval.samples=5` for a less noisy final comparison. With Jev, each
+sample makes two agent calls (baseline and treatment) and two classifications
+(one per candidate). The fallback makes three agent calls per sample: baseline,
+treatment, and one batched generative judge call.
 
 Both backends use fresh temporary workspaces. Kiro disables inherited default
 resources and loads only the treatment skill as a `file://` context resource.
 Claude loads project settings only for the treatment and grants only
-`Skill(zen-of-james)`. Baseline and judge runs therefore do not require the
-user's global skill to be disabled.
+`Skill(zen-of-james)`. The baseline therefore does not require the user's
+global skill to be disabled. Jev does not launch either CLI or load skills; the
+fallback judge uses the selected CLI without configured skills.
