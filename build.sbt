@@ -4,7 +4,7 @@ name := "evals-demo"
 
 libraryDependencies ++= Seq(
   "com.jamesward" %% "zio-evals" % "0.0.4",
-  "com.jamesward" % "skills" % "0.0.3",
+  "com.jamesward" % "skills" % "0.0.4",
 )
 
 fork := true
