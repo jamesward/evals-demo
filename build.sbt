@@ -1,10 +1,16 @@
-scalaVersion := "3.9.0"
+scalaVersion := "3.10.0"
 
 name := "evals-demo"
 
 libraryDependencies ++= Seq(
-  "com.jamesward" %% "zio-evals" % "0.1.2",
-  "com.jamesward" % "skills" % "0.0.4",
+  "com.jamesward" %% "zio-evals" % "0.2.0",
+  "com.jamesward" % "skills" % "0.0.11",
+)
+
+scalacOptions ++= Seq(
+  "-language:strictEquality",
+  "-deprecation",
+  "-Werror",
 )
 
 fork := true
@@ -17,4 +23,4 @@ Global / mcpPort := 5101
 // SkillsJars: extract agent Skills with `./sbt extractSkillsJars`
 skillsJarsOutputDir := Some(file(".kiro/skills"))
 
-libraryDependencies += "com.jamesward" % "skills" % "0.0.10" % Skills
+libraryDependencies += "com.jamesward" % "skills" % "0.0.11" % Skills
