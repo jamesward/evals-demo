@@ -23,7 +23,7 @@ When `TYPESAFE_API_KEY` is non-empty, the demo judges with Jev;
 
 ```bash
 export TYPESAFE_API_KEY=...
-./sbt run
+./sbta run
 ```
 
 Without `TYPESAFE_API_KEY`, the demo automatically falls back to
@@ -36,13 +36,13 @@ Without `TYPESAFE_API_KEY`, the demo automatically falls back to
 Kiro is the default backend and uses the operator's default model:
 
 ```bash
-./sbt run
+./sbta run
 ```
 
 Claude Code can be selected explicitly:
 
 ```bash
-./sbt \
+./sbta \
   -Deval.backend=claude \
   -Deval.model=claude-sonnet-4-6 \
   -Deval.maxBudgetUsd=1.00 \
