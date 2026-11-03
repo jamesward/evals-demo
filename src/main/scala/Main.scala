@@ -1,6 +1,6 @@
 import com.jamesward.zio_evals.*
 import com.jamesward.zio_evals.cli.{ClaudeCliAgentLoop, KiroCliAgentLoop}
-import com.jamesward.zio_typesafe_ai.TypeSafeAI
+import com.jamesward.zio_decisions.typesafe.TypeSafe
 import zio.*
 import zio.http.Client
 
@@ -97,6 +97,6 @@ object Main extends ZIOAppDefault:
     if sys.env.get("TYPESAFE_API_KEY").exists(_.trim.nonEmpty) then
       JevJudge.make()
         .flatMap(runEval(_, "jev"))
-        .provide(Client.default, TypeSafeAI.Client.live)
+        .provide(Client.default, TypeSafe.live)
     else
       runEval(AgentLoopJudge(agentLoop, judgeModelId), s"agent-loop(${Option(judgeModelId).filter(_.nonEmpty).getOrElse("default")})")
