@@ -4,7 +4,7 @@ name := "evals-demo"
 
 libraryDependencies ++= Seq(
   "com.jamesward" %% "zio-evals" % "0.3.0",
-  "com.jamesward" % "skills" % "0.0.24",
+  "com.jamesward" % "skills" % "0.0.27",
 )
 
 scalacOptions ++= Seq(
@@ -18,4 +18,4 @@ fork := true
 // SkillsJars: extract agent Skills with `./sbta extractSkillsJars`
 skillsJarsOutputDir := Some(file(".kiro/skills"))
 
-libraryDependencies += "com.jamesward" % "skills" % "0.0.24" % Skills
+libraryDependencies += "com.jamesward" % "skills" % "0.0.27" % Skills
